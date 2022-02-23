@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { commerce } from "lib/commerce";
 import ProductListing from "components/ProductListing";
 import { Product } from "@chec/commerce.js/types/product";
+import { GetStaticPropsResult } from "next";
 
 interface MainProps {
   products: Product[];
@@ -21,7 +22,9 @@ const Main: FC<MainProps> = (props) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<MainProps>
+> {
   const list = await commerce.products.list();
   const { data: products } = list;
 
@@ -29,6 +32,7 @@ export async function getStaticProps() {
     props: {
       products,
     },
+    revalidate: 30,
   };
 }
 
